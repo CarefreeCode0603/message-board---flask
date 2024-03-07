@@ -1,0 +1,99 @@
+<HTML>
+    <HEAD>
+    <!-- 頁籤標題 -->
+    <TITLE>留言</TITLE>
+    <!-- 引用css/style設計 -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+    <style>
+    p {
+    color: red;
+    }
+    </style>
+    </HEAD>
+    <BODY align="center">
+    <!-- 分隔線hr -->
+    <hr>
+    <br>
+    <CAPTION>
+    <h2><strong>角色一覽</strong></h2>
+    </CAPTION>
+    <br>
+    <form action="/" method="get" name="form1">
+        <th width="10%" class="data">
+            <INPUT TYPE="submit" VALUE="返回首頁" style='text-align:"right"'>
+        </th>
+    </form>
+    <!-- 表格定義 設定置中 -->
+    <table width="800px" align="center" id='Feedback_table'>
+    {%if '3' in user_permission or 'root' == user_permission%}
+    <tr>
+    <th width="25%">角色</th>
+    <th width="15%">權限</th>
+    <th width="10%" class="data">
+        <INPUT TYPE="submit" VALUE="變更" style='text-align:"right"'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </th>
+    {%endif%}
+    </tr>
+    {%if user_identify and ('4' in user_permission or 'root' == user_permission)%}
+        {%for i in all_roles%}
+    <form action="/change_permission" method="POST" name="form1">
+        <tr>
+            <th width="25%" class="data">{{i.role_name}}</th>
+            <!--<th width="15%" class="data">{{i._user_role_}}-->
+            <th class="data">
+                    {% if '0' in i.permission_num %}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="0" checked> 0
+                    {%else%}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="0"> 0
+                    {%endif%}
+                    {% if '1' in i.permission_num %}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="1" checked> 1
+                    {%else%}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="1"> 1
+                    {%endif%}
+                    {% if '2' in i.permission_num %}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="2" checked> 2
+                    {%else%}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="2"> 2
+                    {%endif%}
+                    {% if '3' in i.permission_num %}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="3" checked> 3
+                    {%else%}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="3"> 3
+                    {%endif%}
+                    {% if '4' in i.permission_num %}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="4" checked> 4
+                    {%else%}
+                    <input type="checkbox" id="checkbox0" name="checkbox" value="4"> 4
+                    {%endif%}
+            </th>
+            <th width="25%" class="data" colspan="3">
+                <input type="hidden" name="changed_permission_role_id" value="{{i.id}}">
+                <INPUT TYPE="submit" VALUE="變更" style='text-align:"center"'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </th>
+        </tr>
+    </form>
+        {%endfor%}
+        <form action="/add_new_role" method="POST" name="form1">
+            <tr>
+                <th width="25%" class="data" colspan="3">
+                    <INPUT TYPE="text" id="new_role_name" name="new_role_name" value="" required="required" placeholder="角色名稱" class="BG-Copy" size="30" />
+                    <INPUT TYPE="submit" VALUE="新增角色" style='text-align:"center"'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                </th>
+            </tr>
+        </form>
+    {%else%}
+        <tr>
+            <th class="data" colspan="4">請先登入</th>
+        </tr>
+    {%endif%}
+    </table>
+    {% block content %}
+    {% endblock %}
+    </BODY>
+    <!-- 引用js/index的javascript-->
+    <!--<script src="{{ url_for('static',    filename='js/index.js') }}"></script>-->
+    </HTML>

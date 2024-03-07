@@ -1,0 +1,128 @@
+<HTML>
+    <HEAD>
+    <!-- 頁籤標題 -->
+    <TITLE>留言</TITLE>
+    <!-- 引用css/style設計 -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+    <style>
+    p {
+    color: red;
+    }
+    </style>
+    </HEAD>
+    <BODY align="center">
+    <h1>你好啊！{{user_name}}</h1>
+    {%if user_identify and ('1' in user_permission or 'root' == user_permission)%}
+    <h1>想說甚麼，勇敢說！</h1>
+    <p>寫下你的資料與意見，我們將再與您聯絡。</p>
+    {%endif%}
+    <br>
+    <!-- 輸入框 先宣告submit不回傳 再定義各個欄位form內容 -->
+
+    {%if user_identify%}
+    <form action="/logout" method="POST" name="form1">
+        <a>{{user_role}}</a>
+        <INPUT TYPE="submit" VALUE="登出" class="logout" style='text-align:"right"'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+        {%if '3' in user_permission or 'root' == user_permission%}
+        <div>
+            <form action="/roles_manager" method="POST" name="form1" style="display: inline-block;">
+                <INPUT TYPE="submit" VALUE="編輯角色" class="form_in_a_row" style='text-align:"right"'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </form>
+            <form action="/user_role_manager" method="POST" name="form1" style="display: inline-block;">
+                <INPUT TYPE="submit" VALUE="編輯權限" class="form_in_a_row" style='text-align:"right"'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </form>
+        </div>
+        {%endif%}
+        {% if '1' in user_permission or 'root' == user_permission%}
+        <form action="/getpost" method="POST" name="form1">
+            <!--<INPUT TYPE="text" id="poster_name" name="poster_name" value="" required="required" placeholder="姓名" class="BG-Copy" size="30" />
+            <INPUT TYPE="text" id="poster_email" name="poster_email" value="" required="required" placeholder="電子信箱" class="BG-Copy" size="30" />
+            <br>-->
+            <TEXTAREA NAME="coment" id="coment" ROWS="8" COLS="80" required="required" placeholder="想說甚麼都可以" class="BG-Copy"
+            style="border:2px #2f3944 solid;"></TEXTAREA>
+            <br>
+            <!-- 定義送出鍵的動作，使用JavaScript的function-->
+            <INPUT TYPE="submit" VALUE="送出" class="Base" style='text-align:"right"'>
+            <br>
+            <a>{{message}}</a>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        </form>
+        {% endif %}
+    {%elif show_user_signup%}
+    <form action="/signup" method="POST" name="form1">
+        <INPUT TYPE="text" id="signup_name" name="signup_name" value="" required="required" placeholder="用戶名" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_email" name="signup_email" value="" required="required" placeholder="電子郵件" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_password" name="signup_password" value="" required="required" placeholder="密碼" class="BG-Copy" size="30" />
+        <INPUT TYPE="submit" VALUE="註冊" class="login" style='text-align:"right"'>
+        <input type="hidden" name="show_user_signup" value="False">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {%else%}
+    <form action="/login" method="POST" name="form1">
+        <INPUT TYPE="text" id="poster_name" name="login_email" value="" required="required" placeholder="電子郵件" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="poster_email" name="login_password" value="" required="required" placeholder="密碼" class="BG-Copy" size="30" />
+        <INPUT TYPE="submit" VALUE="登入" class="login" style='text-align:"right"'>
+        <br>
+        <a>{{message}}</a>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    <form action="/signup" method="POST" name="form1">
+        <INPUT TYPE="submit" VALUE="註冊" class="signup" style='text-align:"right"'>
+        <input type="hidden" name="show_user_signup" value="True">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {%endif%}
+    <p>
+    <!-- 插圖 -->
+    <IMG SRC="https://math-media.byjusfutureschool.com/bfs-math/2022/07/04185628/Asset-1-8-300x300.png" width="300px">
+    </p>
+    <!-- 分隔線hr -->
+    <hr>
+    <br>
+    <CAPTION>
+    <h2><strong>我的歷史紀錄</strong></h2>
+    </CAPTION>
+    <br>
+    <!-- 表格定義 設定置中 -->
+    <table width="800px" align="center" id='Feedback_table'>
+    <tr>
+    <th width="25%">留言時間</th>
+    <th width="15%">姓名</th>
+    <th width="20%">email</th>
+    <th width="30%">意見內容</th>
+    <th width="10%"></th>
+    </tr>
+    {%if user_identify and ('0' in user_permission or 'root' == user_permission)%}
+        {%for i in all_posts%}
+        <tr>
+        <form action="/delete_post" method="POST" name="form1">
+            <th width="25%" class="data">{{i.post_time}}</th>
+            <th width="15%" class="data">{{i.poster_name}}</th>
+            <th width="20%" class="data">{{i.poster_email}}</th>
+            <th width="30%" class="data">{{i.post_content}}</th>
+            {%if '2' in user_permission or 'root' == user_permission%}
+            <th width="10%" class="data">
+                <INPUT TYPE="submit" VALUE="刪除" style='text-align:"right"'>
+                <input type="hidden" name="delete_post_id" value="{{i.id}}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </th>
+            {%endif%}
+        </form>
+        </tr>
+        {%endfor%}
+    {%else%}
+        <tr>
+            <th class="data" colspan="4">請先登入</th>
+        </tr>
+    {%endif%}
+    </table>
+    {% block content %}
+    {% endblock %}
+    </BODY>
+    <!-- 引用js/index的javascript-->
+    <!--<script src="{{ url_for('static',    filename='js/index.js') }}"></script>-->
+    </HTML>

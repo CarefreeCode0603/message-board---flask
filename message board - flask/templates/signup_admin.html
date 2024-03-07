@@ -1,0 +1,40 @@
+<HTML>
+    <HEAD>
+    <!-- 頁籤標題 -->
+    <TITLE>留言</TITLE>
+    <!-- 引用css/style設計 -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+    <style>
+    p {
+    color: red;
+    }
+    </style>
+    </HEAD>
+    <BODY align="center">
+    <h1>想說甚麼，勇敢說！</h1>
+    <p>權限註冊</p>
+    <br>
+    <!-- 輸入框 先宣告submit不回傳 再定義各個欄位form內容 -->
+
+    <form action="/signup_admin" method="POST" name="form1">
+        <INPUT TYPE="text" id="signup_name" name="signup_name" value="" required="required" placeholder="用戶名" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_email" name="signup_email" value="" required="required" placeholder="電子郵件" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_password" name="signup_password" value="" required="required" placeholder="密碼" class="BG-Copy" size="30" />
+        <INPUT TYPE="submit" VALUE="註冊" class="login" style='text-align:"right"'>
+        </br>
+        <input type="radio" id="signup_role" name="signup_permission" value="02">編輯者
+        <input type="radio" id="signup_role" name="signup_permission" value="012">擁有者
+        <input type="radio" id="signup_role" name="signup_permission" value="013">權限編輯者
+        <input type="hidden" name="show_user_signup" value="False">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+
+    <p>{{message}}</p>
+    <p>
+    <!-- 插圖 -->
+    <IMG SRC="https://math-media.byjusfutureschool.com/bfs-math/2022/07/04185628/Asset-1-8-300x300.png" width="300px">
+    </p>
+    </BODY>
+    <!-- 引用js/index的javascript-->
+    <!--<script src="{{ url_for('static',    filename='js/index.js') }}"></script>-->
+    </HTML>

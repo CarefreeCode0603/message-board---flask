@@ -1,0 +1,61 @@
+<HTML>
+    <HEAD>
+    <!-- 頁籤標題 -->
+    <TITLE>留言</TITLE>
+    <!-- 引用css/style設計 -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+    <style>
+    p {
+    color: red;
+    }
+    </style>
+    </HEAD>
+    <BODY align="center">
+    <h1>想說甚麼，勇敢說！</h1>
+    <p>寫下你的資料與意見，我們將再與您聯絡。</p>
+    <br>
+    <!-- 輸入框 先宣告submit不回傳 再定義各個欄位form內容 -->
+
+    {%if user_identify%}
+    <form action="/getpost" method="POST" name="form1">
+    <INPUT TYPE="text" id="poster_name" name="poster_name" value="" required="required" placeholder="姓名" class="BG-Copy" size="30" />
+    <INPUT TYPE="text" id="poster_email" name="poster_email" value="" required="required" placeholder="電子信箱" class="BG-Copy" size="30" />
+    <br>
+    <TEXTAREA NAME="coment" id="coment" ROWS="8" COLS="80" required="required" placeholder="想說甚麼都可以" class="BG-Copy"
+    style="border:2px #2f3944 solid;"></TEXTAREA>
+    <br>
+    <!-- 定義送出鍵的動作，使用JavaScript的function-->
+    <INPUT TYPE="submit" VALUE="送出" class="Base" style='text-align:"right"'>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {%elif show_user_signup%}
+    <form action="/signup" method="POST" name="form1">
+        <INPUT TYPE="text" id="signup_name" name="signup_name" value="" required="required" placeholder="用戶名" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_email" name="signup_email" value="" required="required" placeholder="電子郵件" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="signup_password" name="signup_password" value="" required="required" placeholder="密碼" class="BG-Copy" size="30" />
+        <INPUT TYPE="submit" VALUE="註冊" class="login" style='text-align:"right"'>
+        <input type="hidden" name="show_user_signup" value="False">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {%else%}
+    <form action="/login" method="POST" name="form1">
+        <INPUT TYPE="text" id="poster_name" name="login_email" value="" required="required" placeholder="電子郵件" class="BG-Copy" size="30" />
+        <INPUT TYPE="text" id="poster_email" name="login_password" value="" required="required" placeholder="密碼" class="BG-Copy" size="30" />
+        <INPUT TYPE="submit" VALUE="登入" class="login" style='text-align:"right"'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    <form action="/signup" method="POST" name="form1">
+        <INPUT TYPE="submit" VALUE="註冊" class="signup" style='text-align:"right"'>
+        <input type="hidden" name="show_user_signup" value="True">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {%endif%}
+    <p>{{message}}</p>
+    <p>
+    <!-- 插圖 -->
+    <IMG SRC="https://math-media.byjusfutureschool.com/bfs-math/2022/07/04185628/Asset-1-8-300x300.png" width="300px">
+    </p>
+    </BODY>
+    <!-- 引用js/index的javascript-->
+    <!--<script src="{{ url_for('static',    filename='js/index.js') }}"></script>-->
+    </HTML>

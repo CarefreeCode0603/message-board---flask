@@ -1,0 +1,74 @@
+<HTML>
+    <HEAD>
+    <!-- 頁籤標題 -->
+    <TITLE>留言</TITLE>
+    <!-- 引用css/style設計 -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='css/style.css') }}">
+    <style>
+    p {
+    color: red;
+    }
+    </style>
+    </HEAD>
+    <BODY align="center">
+    <!-- 分隔線hr -->
+    <hr>
+    <br>
+    <CAPTION>
+    <h2><strong>使用者一覽</strong></h2>
+    </CAPTION>
+    <br>
+    <form action="/" method="get" name="form1">
+        <th width="10%" class="data">
+            <INPUT TYPE="submit" VALUE="返回首頁" style='text-align:"right"'>
+        </th>
+    </form>
+    <!-- 表格定義 設定置中 -->
+    <table width="800px" align="center" id='Feedback_table'>
+    <tr>
+    <th width="25%">用戶名</th>
+    <th width="15%">角色</th>
+    <!--<th width="10%" class="data">
+        <INPUT TYPE="submit" VALUE="變更" style='text-align:"right"'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </th>-->
+    </tr>
+    {%if user_identify and ('3' in user_permission or 'root' == user_permission)%}
+        {%for i in all_user_permission%}
+    <form action="/change_user_role" method="POST" name="form1">
+        <tr>
+            <th width="25%" class="data">{{i.user_name}}</th>
+            <!--<th width="15%" class="data">{{i._user_role_}}-->
+            <th class="data">
+                    <select name="user_role" id="user_role">
+                    {%for k in all_role_permission%}
+                        {%if i._user_role_ == k.role_name%}
+                        <option value="{{ k.role_name }}" selected>{{ k.role_name }}</option>
+                        {%else%}
+                        <option value="{{ k.role_name }}">{{ k.role_name }}</option>
+                        {%endif%}
+                    {%endfor%}
+                    </select>
+            </th>
+            {%if '3' in user_permission or 'root' == user_permission%}
+            <th width="10%" class="data">
+                <INPUT TYPE="submit" VALUE="變更" style='text-align:"right"'>
+                <input type="hidden" name="change_user_role_id" value="{{ i.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </th>
+            {%endif%}
+        </tr>
+    </form>
+        {%endfor%}
+    {%else%}
+        <tr>
+            <th class="data" colspan="4">請先登入</th>
+        </tr>
+    {%endif%}
+    </table>
+    {% block content %}
+    {% endblock %}
+    </BODY>
+    <!-- 引用js/index的javascript-->
+    <!--<script src="{{ url_for('static',    filename='js/index.js') }}"></script>-->
+    </HTML>
